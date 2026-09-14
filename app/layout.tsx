@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Frank Mesina',
-  description: 'Design & development portfolio.',
+  description: 'Creative Director & Design Systems — Chicago.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
