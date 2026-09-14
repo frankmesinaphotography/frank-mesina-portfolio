@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { imageUrl } from '@/lib/images'
 
 type Category = {
   key: string
@@ -200,7 +201,13 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section className="hero" id="hero">
-        <div className="hero-bg" ref={heroBgRef} />
+        <div
+          className="hero-bg"
+          ref={heroBgRef}
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(12,12,12,0.82) 0%, rgba(12,12,12,0.15) 30%, rgba(12,12,12,0.5) 100%), url('${imageUrl('/hero.webp')}')`,
+          }}
+        />
         <div className="hero-content">
           <div className="hero-fm">FM</div>
           <div className="hero-name">Frank Mesina</div>

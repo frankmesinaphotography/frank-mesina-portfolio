@@ -330,11 +330,10 @@ nav.scrolled {
   overflow: hidden;
 }
 .hero-bg {
+  /* background-image is set inline (see page.tsx) so it can go through the
+     imageUrl() helper — plain CSS url() can't read NEXT_PUBLIC_IMAGE_BASE. */
   position: absolute;
   inset: -20%;
-  background:
-    linear-gradient(to bottom, rgba(12,12,12,0.82) 0%, rgba(12,12,12,0.15) 30%, rgba(12,12,12,0.5) 100%),
-    url('/hero.webp');
   background-size: cover;
   background-position: center;
 }
