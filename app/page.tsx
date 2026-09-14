@@ -117,9 +117,7 @@ export default function HomePage() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDetail, setActiveDetail] = useState<string | null>(null)
-  const [railIndex, setRailIndex] = useState(0)
   const heroBgRef = useRef<HTMLDivElement>(null)
-  const railRef = useRef<HTMLDivElement>(null)
 
   // Nav scroll state + hero parallax — rAF-throttled, same pattern as the
   // photography site's GalleryView hero parallax.
@@ -141,27 +139,8 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Lock body scroll while a detail page is open; reset its rail to slide 0.
-  useEffect(() => {
-    document.body.style.overflow = activeDetail ? 'hidden' : ''
-    setRailIndex(0)
-    if (railRef.current) railRef.current.scrollLeft = 0
-  }, [activeDetail])
-
   function closeMenu() {
     setMobileMenuOpen(false)
-  }
-
-  function railScroll(dir: number) {
-    const rail = railRef.current
-    if (!rail) return
-    rail.scrollBy({ left: dir * rail.offsetWidth, behavior: 'smooth' })
-  }
-
-  function onRailScroll() {
-    const rail = railRef.current
-    if (!rail) return
-    setRailIndex(Math.round(rail.scrollLeft / rail.offsetWidth))
   }
 
   const active = CATEGORIES.find(c => c.key === activeDetail) ?? null
@@ -317,43 +296,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PORTFOLIO DETAIL OVERLAY ── */}
+      {/* ── PORTFOLIO DETAIL OVERLAY ──
+          Keyed by category so switching (or closing) categories remounts a
+          fresh instance — the rail resets to slide 0 for free via initial
+          state, no effect-driven setState needed. */}
       {active && (
-        <div className="detail-page">
-          <div className="detail-nav">
-            <button className="detail-back" onClick={() => setActiveDetail(null)}>&larr; Back to Portfolio</button>
-            <span className="detail-breadcrumb">Portfolio / {active.title}</span>
-          </div>
-          <div className="detail-category-header">
-            <div className="detail-category-eyebrow">Portfolio</div>
-            <h2 className="detail-category-title">{active.title}</h2>
-          </div>
-          <div className="detail-project">
-            <div className="detail-rail-wrap">
-              <div className="detail-rail" ref={railRef} onScroll={onRailScroll}>
-                {active.slides.map(slide => (
-                  <div className="detail-rail-slide" key={slide}><span>{slide}</span></div>
-                ))}
-              </div>
-              <button className="detail-rail-arrow prev" onClick={() => railScroll(-1)}>&#8592;</button>
-              <button className="detail-rail-arrow next" onClick={() => railScroll(1)}>&#8594;</button>
-            </div>
-            <div className="detail-rail-counter">{railIndex + 1} / {active.slides.length}</div>
-            <div className="detail-project-text">
-              <div className="detail-project-subtitle">{active.subtitle}</div>
-              <p className="detail-project-desc">{active.desc}</p>
-              <div className="detail-project-role">{active.role}</div>
-            </div>
-          </div>
-          <div className="detail-footer-nav">
-            {prevCategory
-              ? <button className="detail-next-btn" onClick={() => setActiveDetail(prevCategory.key)}>&larr; {prevCategory.title}</button>
-              : <span />}
-            {nextCategory
-              ? <button className="detail-next-btn" onClick={() => setActiveDetail(nextCategory.key)}>{nextCategory.title} &rarr;</button>
-              : <span />}
-          </div>
-        </div>
+        <DetailOverlay
+          key={active.key}
+          category={active}
+          prevCategory={prevCategory}
+          nextCategory={nextCategory}
+          onClose={() => setActiveDetail(null)}
+          onSelect={setActiveDetail}
+        />
       )}
 
       {/* ── FOOTER ── */}
@@ -368,5 +323,76 @@ export default function HomePage() {
         </div>
       </footer>
     </>
+  )
+}
+
+// Full-screen portfolio category detail — mounted fresh per category (see
+// the `key={active.key}` at its call site), so `railIndex` starts at 0
+// naturally on every open/switch with no reset effect required.
+function DetailOverlay({
+  category, prevCategory, nextCategory, onClose, onSelect,
+}: {
+  category: Category
+  prevCategory: Category | null
+  nextCategory: Category | null
+  onClose: () => void
+  onSelect: (key: string) => void
+}) {
+  const [railIndex, setRailIndex] = useState(0)
+  const railRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  function railScroll(dir: number) {
+    const rail = railRef.current
+    if (!rail) return
+    rail.scrollBy({ left: dir * rail.offsetWidth, behavior: 'smooth' })
+  }
+
+  function onRailScroll() {
+    const rail = railRef.current
+    if (!rail) return
+    setRailIndex(Math.round(rail.scrollLeft / rail.offsetWidth))
+  }
+
+  return (
+    <div className="detail-page">
+      <div className="detail-nav">
+        <button className="detail-back" onClick={onClose}>&larr; Back to Portfolio</button>
+        <span className="detail-breadcrumb">Portfolio / {category.title}</span>
+      </div>
+      <div className="detail-category-header">
+        <div className="detail-category-eyebrow">Portfolio</div>
+        <h2 className="detail-category-title">{category.title}</h2>
+      </div>
+      <div className="detail-project">
+        <div className="detail-rail-wrap">
+          <div className="detail-rail" ref={railRef} onScroll={onRailScroll}>
+            {category.slides.map(slide => (
+              <div className="detail-rail-slide" key={slide}><span>{slide}</span></div>
+            ))}
+          </div>
+          <button className="detail-rail-arrow prev" onClick={() => railScroll(-1)}>&#8592;</button>
+          <button className="detail-rail-arrow next" onClick={() => railScroll(1)}>&#8594;</button>
+        </div>
+        <div className="detail-rail-counter">{railIndex + 1} / {category.slides.length}</div>
+        <div className="detail-project-text">
+          <div className="detail-project-subtitle">{category.subtitle}</div>
+          <p className="detail-project-desc">{category.desc}</p>
+          <div className="detail-project-role">{category.role}</div>
+        </div>
+      </div>
+      <div className="detail-footer-nav">
+        {prevCategory
+          ? <button className="detail-next-btn" onClick={() => onSelect(prevCategory.key)}>&larr; {prevCategory.title}</button>
+          : <span />}
+        {nextCategory
+          ? <button className="detail-next-btn" onClick={() => onSelect(nextCategory.key)}>{nextCategory.title} &rarr;</button>
+          : <span />}
+      </div>
+    </div>
   )
 }
