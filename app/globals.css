@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import url('https://fonts.cdnfonts.com/css/alte-haas-grotesk');
+
+/* ── Design tokens — carried over from the FM Photography rebuild ──
+   Same brand palette, type system, and white-opacity ramp, so this site
+   reads as part of the same world. See that project's DESIGN.md for the
+   full reference this was ported from. */
+:root {
+  /* ── Brand ── */
+  --accent:            #941818;
+  --accent-dim:        rgba(148, 24, 24, 0.15);
+  --accent-pill:       rgba(148, 24, 24, 0.12);
+  --accent-ring:       rgba(148, 24, 24, 0.5);
+
+  /* ── Backgrounds ── */
+  --bg:                #0a0a0a;
+  --surface:           #111111;
+
+  /* ── White opacity ramp ── */
+  --w60:               rgba(255, 255, 255, 0.6);
+  --w50:               rgba(255, 255, 255, 0.5);
+  --w45:               rgba(255, 255, 255, 0.45);
+  --w42:               rgba(255, 255, 255, 0.42);
+  --w40:               rgba(255, 255, 255, 0.4);
+  --w35:               rgba(255, 255, 255, 0.35);
+  --w30:               rgba(255, 255, 255, 0.3);
+  --w25:               rgba(255, 255, 255, 0.25);
+  --w22:               rgba(255, 255, 255, 0.22);
+  --w20:               rgba(255, 255, 255, 0.2);
+  --w15:               rgba(255, 255, 255, 0.15);
+  --w12:               rgba(255, 255, 255, 0.12);
+  --w08:               rgba(255, 255, 255, 0.08);
+  --w07:               rgba(255, 255, 255, 0.07);
+  --w06:               rgba(255, 255, 255, 0.06);
+  --w05:               rgba(255, 255, 255, 0.05);
+  --w03:               rgba(255, 255, 255, 0.03);
+
+  /* ── Black overlays ── */
+  --overlay-darkest:   rgba(0, 0, 0, 0.98);
+  --overlay-backdrop:  rgba(0, 0, 0, 0.9);
+  --overlay-header:    rgba(0, 0, 0, 0.85);
+  --overlay-close-bg:  rgba(10, 10, 10, 0.6);
+
+  /* ── Dividers ── */
+  --divider:           rgba(255, 255, 255, 0.07);
+  --border-subtle:     rgba(255, 255, 255, 0.08);
+  --border-pill:       rgba(255, 255, 255, 0.12);
+
+  /* ── Easing ── */
+  --ease-spring:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cover:        cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ── Typography ── */
+  --font-ui:           "Alte Haas Grotesk", sans-serif;
+  --font-serif:        "Iowan Old Style", "Georgia", serif;
+
+  /* ── Semantic aliases ── */
+  --text-primary:      var(--w60);
+  --text-nav:          var(--w45);
+  --text-body:         var(--w42);
+  --text-secondary:    var(--w35);
+  --text-muted:        var(--w25);
+  --text-ghost:        var(--w20);
+  --text-whisper:      var(--w15);
+
+  --border-default:    var(--divider);
+  --border-nav:        var(--w08);
+  --border-hover:      var(--w30);
+
+  --surface-hover:     var(--w03);
+  --surface-active:    var(--w12);
+  --surface-overlay:   var(--overlay-backdrop);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg);
+  color: #fff;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+}
