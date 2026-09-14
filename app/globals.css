@@ -5,18 +5,30 @@
    Same brand palette as the FM Photography rebuild (--accent, --bg) plus
    this artifact's own compact token set, which every class below was
    written against — kept as-is rather than remapped onto the photography
-   site's larger white-opacity-ramp system. */
+   site's larger white-opacity-ramp system. Values below are re-synced to
+   that system's current tokens (2026-09-14) — the July 19 exploration
+   predates some of this and had drifted: --bg/--surface were off by a
+   couple RGB points, --text was a warm cream tint rather than neutral
+   white, and --rule was noticeably more visible than the site's actual
+   ~7%-white dividers. */
 :root {
   --accent:   #941818;
-  --bg:       #0C0C0C;
-  --surface:  #141414;
-  --text:     #E8E6E0;
+  --bg:       #0a0a0a;
+  --surface:  #111111;
+  --text:     #fff;
   --muted:    #666;
-  --rule:     #222;
+  --rule:     #1b1b1b;
   --nav-h:    64px;
 
   --font-ui:     "Alte Haas Grotesk", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --font-serif:  "Iowan Old Style", "Georgia", serif;
+
+  /* Same codified easing curves the photography site uses — spring for
+     slides/expands/drawers, cover for zoom-on-hover. The folio previously
+     used bare `ease`/no curve everywhere, which reads flatter/less
+     considered than the rest of the site's interactions. */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cover:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -247,7 +259,7 @@ nav.scrolled {
   min-width: 200px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s ease, transform 0.3s var(--ease-spring);
 }
 .dropdown::before {
   content: '';
@@ -279,7 +291,7 @@ nav.scrolled {
   width: 24px;
   height: 1.5px;
   background: var(--text);
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s var(--ease-spring), opacity 0.25s ease;
 }
 .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; }
@@ -510,7 +522,7 @@ nav.scrolled {
   gap: 0.4rem;
   opacity: 0;
   transform: translateX(-4px);
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.25s ease, transform 0.3s var(--ease-spring);
 }
 .portfolio-card:hover .card-arrow {
   opacity: 1;
