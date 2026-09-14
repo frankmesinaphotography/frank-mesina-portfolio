@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { imageUrl } from '@/lib/images'
 
 type Category = {
@@ -110,6 +111,7 @@ const MOBILE_LINKS = [
   { href: '#profile', label: 'About' },
   { href: '#resume', label: 'Résumé' },
   { href: '#portfolio', label: 'Portfolio' },
+  { href: '/design-system', label: 'Design System' },
   { href: '#photography', label: 'Photography' },
   { href: '#contact', label: 'Contact' },
 ]
@@ -151,18 +153,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── SVG FILTER — same distressed-title recipe as the photography site,
-          reserved for the same kind of moment (a page's one big title), not
-          every heading. */}
-      <svg width="0" height="0" style={{ position: 'absolute', overflow: 'hidden' }}>
-        <defs>
-          <filter id="distressed-folio" x="-5%" y="-5%" width="110%" height="110%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.055" numOctaves="4" seed="2" stitchTiles="stitch" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-            <feComposite in="displaced" in2="SourceGraphic" operator="in" />
-          </filter>
-        </defs>
-      </svg>
+      {/* SVG filter defs now live once in app/layout.tsx, shared across routes. */}
 
       {/* ── NAV ── */}
       <nav className={navScrolled ? 'scrolled' : ''}>
@@ -180,6 +171,7 @@ export default function HomePage() {
               ))}
             </div>
           </li>
+          <li><Link href="/design-system">Design System</Link></li>
           <li><a href="#photography">Photography</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
