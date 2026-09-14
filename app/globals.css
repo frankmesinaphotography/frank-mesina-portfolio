@@ -96,6 +96,7 @@ body {
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
+  filter: url(#distressed-folio);
 }
 .detail-project {
   border-bottom: 1px solid var(--rule);
@@ -349,6 +350,7 @@ nav.scrolled {
   color: var(--accent);
   letter-spacing: -0.04em;
   line-height: 0.85;
+  filter: url(#distressed-folio);
 }
 .hero-name {
   font-size: 1.4rem;
@@ -551,10 +553,25 @@ nav.scrolled {
   grid-template-rows: 1fr 1fr;
   gap: 4px;
 }
+/* Mask + scaled-layer split (same construction as the photography site's
+   cover images) — .photo-thumb is the mask: it clips, holds the border,
+   and is never itself transformed. .photo-thumb-layer is the background
+   layer that zooms on hover. Currently a flat placeholder, but a real
+   <img className="photo-thumb-layer"> can drop straight in later with no
+   restructuring needed. */
 .photo-thumb {
   aspect-ratio: 1;
-  background: #1A1A1A;
   border: 1px solid var(--rule);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.photo-thumb-layer {
+  position: absolute;
+  inset: 0;
+  background: #1A1A1A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -562,6 +579,10 @@ nav.scrolled {
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition: transform 0.5s var(--ease-cover);
+}
+.photo-thumb:hover .photo-thumb-layer {
+  transform: scale(1.06);
 }
 .photo-thumb:first-child {
   grid-column: span 2;
