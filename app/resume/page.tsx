@@ -16,7 +16,7 @@ const EXPERIENCE = [
   {
     role: 'Design Systems Lead, Senior Product Designer',
     org: 'Tempus', loc: 'Chicago, IL', dates: 'Apr 2021 — Present',
-    desc: `Led the shift from a fragmented, product-by-product design system to a single core system — the shared foundation every team now builds from, instead of maintaining separate one-off systems per product — spanning 30+ reusable styles, patterns, and components with a focus on accessibility at the component level. Also driving the system's evolution into a machine-readable format, so Claude can interpret component tokens and specs directly in VS Code, cutting design-to-development handoff friction across the org. Additional responsibilities span roadmap planning, gathering acceptance criteria with product teams, UAT testing, and evangelizing the system through release notes, office hours, and design syncs.`,
+    desc: `Led the shift from a fragmented, product-by-product design system to a single core system — the shared foundation every team now builds from — spanning 30+ reusable styles, patterns, and components with a focus on accessibility at the component level. Also driving the system's evolution into a machine-readable format, so Claude can interpret component tokens and specs directly in VS Code, cutting design-to-development handoff friction across the org. Additional responsibilities span roadmap planning, gathering acceptance criteria with product teams, UAT testing, and evangelizing the system through release notes, office hours, and design syncs.`,
   },
   {
     role: 'Contract Lead Visual Designer, Web Applications Design Systems',
