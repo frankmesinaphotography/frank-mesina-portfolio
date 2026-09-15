@@ -109,7 +109,7 @@ const CATEGORIES: Category[] = [
 
 const MOBILE_LINKS = [
   { href: '#profile', label: 'About' },
-  { href: '#resume', label: 'Résumé' },
+  { href: '/resume', label: 'Résumé' },
   { href: '#portfolio', label: 'Portfolio' },
   { href: '/design-system', label: 'Design System' },
   { href: '#photography', label: 'Photography' },
@@ -160,7 +160,7 @@ export default function HomePage() {
         <a className="nav-logo" href="#">FM</a>
         <ul className="nav-links">
           <li><a href="#profile">About</a></li>
-          <li><a href="#resume">Résumé</a></li>
+          <li><Link href="/resume">Résumé</Link></li>
           <li className="has-dropdown">
             <a href="#portfolio">+ Portfolio</a>
             <div className="dropdown">
@@ -222,8 +222,7 @@ export default function HomePage() {
             kiosk interfaces. Currently leading design system strategy at Tempus — including an initiative to make
             the system machine-ready using AI-assisted design-to-development workflows.
           </p>
-          {/* TODO: this pointed at a résumé Artifact that no longer exists — needs a real destination. */}
-          <a className="profile-cta" href="#" id="resume">View full résumé &rarr;</a>
+          <Link className="profile-cta" href="/resume" id="resume">View full résumé &rarr;</Link>
         </div>
       </section>
 
