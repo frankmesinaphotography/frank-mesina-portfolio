@@ -262,7 +262,11 @@ export default function HomePage() {
         </div>
         <div className="photo-grid">
           <div className="photo-thumb">
-            <div className="photo-thumb-layer">Photo placeholder</div>
+            <img
+              className="photo-thumb-layer"
+              src={imageUrl('/images/home-page/thumbnail-tiles/knee-his-eb-portraits-bw-14.jpg')}
+              alt="Black and white concert photograph"
+            />
           </div>
           <div className="photo-thumb" style={{ aspectRatio: 1 }}>
             <div className="photo-thumb-layer">Placeholder</div>
