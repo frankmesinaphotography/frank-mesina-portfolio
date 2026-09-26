@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "design-doc": "node scripts/generate-design-doc.mjs",
+    "check-tokens": "node \"../FM Photography Site/scripts/check-design-tokens.mjs\""
   },
   "dependencies": {
     "next": "^15.5.15",

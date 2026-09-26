@@ -1,19 +1,39 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { readTokens, tokenValue } from '@/lib/design-tokens'
 
 export const metadata: Metadata = {
   title: 'Design System — Frank Mesina',
   description: 'The tokens and components behind this site, shown live rather than described.',
 }
 
+// Read once, at build time. This page is a server component, so the values
+// below come out of app/globals.css itself rather than being retyped here.
+// Anything this page displays is therefore the stylesheet's actual value: if
+// a token changes, this page changes with it or the build fails.
+const tokens = readTokens()
+
 const COLORS = [
-  { name: 'Accent', token: '--accent', value: '#941818' },
-  { name: 'Background', token: '--bg', value: '#0a0a0a' },
-  { name: 'Surface', token: '--surface', value: '#111111' },
-  { name: 'Text', token: '--text', value: '#fff' },
-  { name: 'Muted', token: '--muted', value: '#666' },
-  { name: 'Rule', token: '--rule', value: '#1b1b1b' },
-]
+  { name: 'Accent', token: '--accent' },
+  { name: 'Background', token: '--bg' },
+  { name: 'Surface', token: '--surface' },
+  { name: 'Text', token: '--text' },
+  { name: 'Muted', token: '--muted' },
+  { name: 'Rule', token: '--rule' },
+].map(c => ({ ...c, value: tokenValue(tokens, c.token) }))
+
+const EASINGS = [
+  {
+    name: 'Spring',
+    token: '--ease-spring',
+    use: 'Drawers, dropdowns, the hamburger morph — anything that slides or expands.',
+  },
+  {
+    name: 'Cover',
+    token: '--ease-cover',
+    use: 'Image hover-zoom — the portfolio photo grid uses this exact curve.',
+  },
+].map(e => ({ ...e, curve: tokenValue(tokens, e.token) }))
 
 const TYPE_SCALE = [
   { label: 'Hero mark', token: '.hero-fm', size: 'clamp(6rem, 16vw, 14rem)', sample: 'FM', style: { fontFamily: 'var(--font-ui)', fontWeight: 700, color: 'var(--accent)', fontSize: 'clamp(2.5rem, 6vw, 4rem)', letterSpacing: '-0.04em', lineHeight: 0.85 } },
@@ -36,9 +56,10 @@ export default function DesignSystemPage() {
         <div className="ds-eyebrow">Design System</div>
         <h1 className="ds-title">The system behind this site</h1>
         <p className="ds-lede">
-          Colors, type, motion, and components — shown live rather than described, since a design
-          system is easier to trust when you can see it working. Everything here reads from this
-          site&apos;s actual tokens, not restated copy.
+          Colors, type, motion, and components, shown live rather than described, since a design
+          system is easier to trust when you can see it working. Every value on this page is read
+          out of <code>app/globals.css</code> when the site builds, so nothing here can quietly
+          fall out of step with the stylesheet it documents.
         </p>
       </section>
 
@@ -48,7 +69,9 @@ export default function DesignSystemPage() {
         <div className="ds-swatch-grid">
           {COLORS.map(c => (
             <div className="ds-swatch" key={c.token}>
-              <div className="ds-swatch-fill" style={{ background: c.value }} />
+              {/* Filled with the live custom property, labelled with the value
+                  parsed from the stylesheet. Both trace back to :root. */}
+              <div className="ds-swatch-fill" style={{ background: `var(${c.token})` }} />
               <div className="ds-swatch-meta">
                 <div className="ds-swatch-name">{c.name}</div>
                 <div className="ds-swatch-value">{c.token} &middot; {c.value}</div>
@@ -75,20 +98,19 @@ export default function DesignSystemPage() {
       <section className="ds-section" id="motion">
         <div className="ds-section-label">Motion — hover each card</div>
         <div className="ds-easing-grid">
-          <div className="ds-easing-card">
-            <div className="ds-easing-name">Spring</div>
-            <div className="ds-easing-curve">--ease-spring: cubic-bezier(0.16, 1, 0.3, 1)</div>
-            <div className="ds-easing-use">Drawers, dropdowns, the hamburger morph — anything that slides or expands.</div>
-            <div className="ds-easing-track"><div className="ds-easing-dot" /></div>
-            <div className="ds-easing-hint">Hover to see it move &rarr;</div>
-          </div>
-          <div className="ds-easing-card">
-            <div className="ds-easing-name">Cover</div>
-            <div className="ds-easing-curve">--ease-cover: cubic-bezier(0.25, 0.46, 0.45, 0.94)</div>
-            <div className="ds-easing-use">Image hover-zoom — the portfolio photo grid uses this exact curve.</div>
-            <div className="ds-easing-track"><div className="ds-easing-dot" /></div>
-            <div className="ds-easing-hint">Hover to see it move &rarr;</div>
-          </div>
+          {EASINGS.map(e => (
+            <div className="ds-easing-card" key={e.token}>
+              <div className="ds-easing-name">{e.name}</div>
+              <div className="ds-easing-curve">{e.token}: {e.curve}</div>
+              <div className="ds-easing-use">{e.use}</div>
+              <div className="ds-easing-track">
+                {/* Timing function comes from the token this card renders, so
+                    the demo can't drift from the curve it names. */}
+                <div className="ds-easing-dot" style={{ transitionTimingFunction: `var(${e.token})` }} />
+              </div>
+              <div className="ds-easing-hint">Hover to see it move &rarr;</div>
+            </div>
+          ))}
         </div>
       </section>
 

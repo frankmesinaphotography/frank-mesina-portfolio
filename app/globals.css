@@ -1,6 +1,25 @@
 @import url('https://fonts.cdnfonts.com/css/alte-haas-grotesk');
 @import "tailwindcss";
 
+/* The cdnfonts CSS lists local('Alte Haas Grotesk') first for both weights;
+   on a Mac with the font installed that name resolves to the Regular file, so
+   700 renders as Regular. Declared after the import, these win and always pull
+   the real files. Same fix the photo site and uap-archive carry. */
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.cdnfonts.com/s/8581/AlteHaasGroteskRegular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Alte Haas Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.cdnfonts.com/s/8581/AlteHaasGroteskBold.woff') format('woff');
+}
+
 /* ── Design tokens ──
    Same brand palette as the FM Photography rebuild (--accent, --bg) plus
    this artifact's own compact token set, which every class below was
@@ -570,6 +589,10 @@ nav.scrolled {
 .photo-thumb-layer {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Only bites on the real <img>; the placeholder divs ignore it. */
+  object-fit: cover;
   background: #1A1A1A;
   display: flex;
   align-items: center;
@@ -871,8 +894,8 @@ footer {
   transition: transform 0.7s;
 }
 .ds-easing-card:hover .ds-easing-dot { transform: translateX(calc(100% + 0px)); }
-.ds-easing-card:nth-child(1) .ds-easing-dot { transition-timing-function: var(--ease-spring); }
-.ds-easing-card:nth-child(2) .ds-easing-dot { transition-timing-function: var(--ease-cover); }
+/* The timing function is set inline from the token the card is rendering, so
+   adding a third curve doesn't depend on card order. */
 .ds-easing-hint {
   font-size: 0.58rem;
   letter-spacing: 0.15em;
